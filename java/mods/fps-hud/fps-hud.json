@@ -1,0 +1,7 @@
+{
+  "id": "fps_hud",
+  "name": "FPS HUD",
+  "version": "1.0",
+  "author": "ModHost",
+  "bedrock": "dev.modhost.fpshud.FpsHud"
+}
