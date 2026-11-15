@@ -1,0 +1,23 @@
+name: convert-mods
+on: workflow_dispatch
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: ''
+      - name: Android SDK pieces
+        run: sdkmanager "build-tools;35.0.0" "platforms;android-35"
+      - run: bash scripts/build-java.sh
+      - name: Convert jars in mods-in/
+        run: |
+          D8="$(ls -d "$ANDROID_HOME"/build-tools/*/d8 | sort -V | tail -1)"
+          AJ="$(ls -d "$ANDROID_HOME"/platforms/android-*/android.jar | sort -V | tail -1)"
+          python3 scripts/convert_mod.py "$D8" "$AJ" build/java/api.jar mods-in build/converted
+      - uses: actions/upload-artifact@v4
+        with: { name: converted-mods, path: build/converted }

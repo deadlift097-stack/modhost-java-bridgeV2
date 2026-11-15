@@ -1,0 +1,55 @@
+name: build
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  java:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: ''
+      - name: Android SDK pieces
+        run: sdkmanager "build-tools;35.0.0" "platforms;android-35"
+      - run: bash scripts/build-java.sh
+      - uses: actions/upload-artifact@v4
+        with: { name: java-dex, path: build/java }
+
+  native:
+    needs: java
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { path: bridge }
+      - uses: actions/checkout@v4
+        with:
+          repository: QYCottage/levilauncher-android-mod-template
+          path: tpl
+      - uses: actions/download-artifact@v4
+        with: { name: java-dex, path: bridge/build/java }
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: ''
+      - name: NDK + CMake
+        run: |
+          sdkmanager "ndk;28.2.13676358" "cmake;3.22.1"
+          sudo apt-get install -y ninja-build
+      - name: Overlay bridge onto template
+        run: python3 bridge/scripts/overlay.py bridge tpl
+      - name: Build .levipack
+        shell: pwsh
+        working-directory: tpl
+        run: ./scripts/package.ps1 -Abi arm64-v8a
+      - name: Name the package modhost-java-bridge.levipack
+        run: |
+          mkdir -p out
+          f="$(find tpl -name '*.levipack' | head -1)"
+          [ -n "$f" ] && cp "$f" out/modhost-java-bridge.levipack
+          cp bridge/build/java/mods/* out/ || true
+          ls -la out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: modhost-java-bridge
+          path: out/*
