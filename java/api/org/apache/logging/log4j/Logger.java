@@ -1,0 +1,51 @@
+package org.apache.logging.log4j;
+
+/** Minimal log4j2 API so mods that log through log4j load unchanged. */
+public interface Logger {
+    String getName();
+    boolean isTraceEnabled();
+    boolean isDebugEnabled();
+    boolean isInfoEnabled();
+    boolean isWarnEnabled();
+    boolean isErrorEnabled();
+    boolean isFatalEnabled();
+    void trace(String message);
+    void trace(Object message);
+    void trace(String message, Object p0);
+    void trace(String message, Object p0, Object p1);
+    void trace(String message, Object... params);
+    void trace(String message, Throwable t);
+    void debug(String message);
+    void debug(Object message);
+    void debug(String message, Object p0);
+    void debug(String message, Object p0, Object p1);
+    void debug(String message, Object... params);
+    void debug(String message, Throwable t);
+    void info(String message);
+    void info(Object message);
+    void info(String message, Object p0);
+    void info(String message, Object p0, Object p1);
+    void info(String message, Object... params);
+    void info(String message, Throwable t);
+    void warn(String message);
+    void warn(Object message);
+    void warn(String message, Object p0);
+    void warn(String message, Object p0, Object p1);
+    void warn(String message, Object... params);
+    void warn(String message, Throwable t);
+    void error(String message);
+    void error(Object message);
+    void error(String message, Object p0);
+    void error(String message, Object p0, Object p1);
+    void error(String message, Object... params);
+    void error(String message, Throwable t);
+    void fatal(String message);
+    void fatal(Object message);
+    void fatal(String message, Object p0);
+    void fatal(String message, Object p0, Object p1);
+    void fatal(String message, Object... params);
+    void fatal(String message, Throwable t);
+    void log(Level level, String message);
+    void log(Level level, String message, Object... params);
+    void log(Level level, String message, Throwable t);
+}
