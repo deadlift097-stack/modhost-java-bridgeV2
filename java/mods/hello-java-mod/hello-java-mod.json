@@ -1,0 +1,7 @@
+{
+  "id": "hello_java",
+  "name": "Hello Java",
+  "version": "1.0",
+  "author": "ModHost",
+  "bedrock": "dev.example.hello.HelloMod"
+}
