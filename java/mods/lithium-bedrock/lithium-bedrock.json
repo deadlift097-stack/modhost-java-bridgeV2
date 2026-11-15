@@ -1,0 +1,7 @@
+{
+  "id": "lithium",
+  "name": "Lithium",
+  "version": "bedrock-1.0",
+  "author": "ModHost",
+  "bedrock": "dev.modhost.lithium.LithiumBedrock"
+}
